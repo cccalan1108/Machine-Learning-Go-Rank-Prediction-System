@@ -11,13 +11,13 @@ https://www.kaggle.com/competitions/machine-learning-class-fall-2025-assignment-
 
 # Dataset Description
 
-### train_set 
+### train_set：
 The training set The training set consists of nine files, each corresponding to one rank (1D–9D). For example: log_9D_policy_train.txt contains data from 9-dan players, log_8D_policy_train.txt from 8-dan, and so on. Each file records all moves from many games of that rank. Each move includes multiple types of features (policy values, rank model outputs, strength score, lead information).
 
-### test_set 
+### test_set：
 The test set The test set has the same format, but samples are aggregated from different game sets than the training data. Test samples are grouped several games per sample. This ensures that models cannot rely on memorization and must generalize to unseen data.
 
-### sample_submission.csv 
+### sample_submission.csv：
 Asample submission file in the correct format
 
 
@@ -64,6 +64,166 @@ python trainml1.py \
 ```
 
 
+Argument Description
+
+```bash
+--train_dir: Training data directory (default: train_set)
+--out_dir: Output directory (default: current directory)
+--gpu: Use GPU acceleration
+--seq_len: Sequence length (default: 120)
+--epochs: Number of training epochs (default: 10)
+--batch_size: Batch size (default: 128)
+--lr: Learning rate (default: 0.007)
+--seed: Random seed (default: 42)
+```
+
+
+
+
+# Q5.py
+
+
+The main testing script is Q5.py.
+It automatically loads model_stackx.pkl and generates the final prediction file under out_dir/.
+Key Features:
+- Pretrained stack loading: Loads the pre‑trained stacked model.
+- Flexible ensembling: Supports multiple model ensembling strategies.
+- Automated test handling: Automatically processes test files and generates predictions.
+- Submission ready: Outputs a CSV submission file.
+
+
+```bash
+python Q5.py --test_dir test_set --model_path model_stackx.pkl --out_csv submission.csv
+```
+
+Argument Description
+
+```bash
+--test_dir: Test data directory (default: test_set)
+--model_path: Path to the model file (default: model_stackx.pkl)
+--out_csv: Output CSV file (default: submission.csv)
+```
+
+
+
+# Training Summary
+
+Example train_summary.json:
+
+
+```bash
+{
+  "oof_acc_seq_tf": 0.4015,
+  "oof_acc_seq_bl": 0.3868,
+  "oof_acc_tab": 0.2031,
+  "oof_acc_meta": 0.4244
+}
+```
+
+Meaning:
+- seq_tf: Accuracy of the transformer‑based sequence model
+- seq_bl: Accuracy of the baseline RNN model
+- tab: Accuracy of the tabular‑feature model
+- meta: Accuracy of the final stacked model (stacking meta model)
+
+
+
+
+
+# Data Format
+
+### Input Data Format
+
+- Training data: log_XD_policy_train.txt, where X = 1–9 corresponds to different ranks.
+- Test data: X.txt, where X is the file index.
+
+
+### File Contents
+
+Each line records a move and its corresponding feature information, including:
+- Game ID: Game X
+- Move: represented as B[coord] or W[coord] for black/white moves
+- Feature vector:
+  - Policy vector (9‑dim)
+  - Value vector (9‑dim)
+  - Rank probability vector (9‑dim)
+  - Strength (1‑dim)
+  - Winrate, Lead, Uncertainty (3‑dim)
+
+
+
+
+# Model Architecture Overview
+
+1. Sequence Models
+- TinyTransformer: Transformer‑based sequence model capturing long‑term game dependencies.
+- BiLSTM: Bidirectional LSTM model for time‑series information.
+- Config: Total feature dimension is 79, with sequence length set to 120 moves.
+2. Tabular Models
+- Models: CatBoost or HistGradientBoostingClassifier (HGBT).
+- Design: Extracts statistical information and game‑state dynamics from the entire game, and partitions features into opening, midgame, and endgame segments.
+3. Fusion via Meta‑learning
+- Meta‑learner: Logistic Regression.
+- Fusion: Combines outputs from the sequence models and tabular models, along with additional side features, to form the final prediction.
+
+
+# Feature Engineering Design
+### Sequence Features (79‑dim)
+- Basic features: Policy, Value, RankP (9‑dim each) + Strength, Winrate, Lead, Uncertainty
+- Derived features: Max values and entropies (12‑dim total)
+- Difference features: First‑ and second‑order differences (40‑dim total)
+- Board position and color: Color indicators and normalized move positions
+
+
+### Tabular Features
+- Statistical features: mean, standard deviation, max/min, median, skewness, etc.
+- Phase features: extracted separately for opening, midgame, and endgame.
+- Preference features: style indicators such as entropy, maximum, and mode.
+
+
+### Side Features (10‑dim)
+- Entropies of Policy / Value / RankP
+- Game length (log‑scaled)
+- Standard deviation of Winrate
+- Mean absolute Lead
+- Mean Uncertainty
+- Policy entropy in opening / midgame / endgame
+
+
+
+
+
+# Training Pipeline
+1.Data Parsing: Read game logs and convert them into model‑ready formats.
+2.Feature Processing: Extract and integrate sequence and tabular features.
+3.Model Training:
+  - Train the Transformer and BiLSTM sequence models.
+  - Train tabular models (CatBoost or HGBT).
+4.Model Ensembling: Use Logistic Regression to combine outputs of multiple models into the final prediction.
+5.Model Saving: Store the complete stacked model as model_stackx.pkl
+
+
+
+
+# Prediction Pipeline
+1.Model Loading: Load the trained model_stackx.pkl.
+2.Data Processing: Parse test data and generate features consistent with the training phase.
+3.Multi‑model Prediction:
+  - Use Transformer and BiLSTM for sequence predictions.
+  - Tabular models predict global features.
+  - Incorporate side features for additional signals.
+4.Model Ensembling: The meta‑learner aggregates predictions from all models.
+5.Output Results: Generate the final submission file submission.csv (containing id and rank columns).
+
+
+
+
+# Output Files
+1.Training Phase
+  - model_stackx.pkl: Complete stacked model
+  - train_summary.json: Training summary information
+2.Prediction Phase
+  - submission.csv: Prediction results (with id and rank columns)
 
 
 
@@ -244,6 +404,7 @@ meta: 最終堆疊模型（Stacking Meta Model）準確率
 
 ### 預測階段
 - `submission.csv`: 預測結果（包含 id 和 rank 欄位）
+
 
 
 
