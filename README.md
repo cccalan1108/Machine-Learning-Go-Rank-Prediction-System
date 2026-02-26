@@ -11,11 +11,14 @@ https://www.kaggle.com/competitions/machine-learning-class-fall-2025-assignment-
 
 # Dataset Description
 
-train_set - the training set The training set consists of nine files, each corresponding to one rank (1D–9D). For example: log_9D_policy_train.txt contains data from 9-dan players, log_8D_policy_train.txt from 8-dan, and so on. Each file records all moves from many games of that rank. Each move includes multiple types of features (policy values, rank model outputs, strength score, lead information).
+## train_set 
+The training set The training set consists of nine files, each corresponding to one rank (1D–9D). For example: log_9D_policy_train.txt contains data from 9-dan players, log_8D_policy_train.txt from 8-dan, and so on. Each file records all moves from many games of that rank. Each move includes multiple types of features (policy values, rank model outputs, strength score, lead information).
 
-test_set - the test set The test set has the same format, but samples are aggregated from different game sets than the training data. Test samples are grouped several games per sample. This ensures that models cannot rely on memorization and must generalize to unseen data.
+## test_set 
+The test set The test set has the same format, but samples are aggregated from different game sets than the training data. Test samples are grouped several games per sample. This ensures that models cannot rely on memorization and must generalize to unseen data.
 
-sample_submission.csv - a sample submission file in the correct format
+## sample_submission.csv 
+Asample submission file in the correct format
 
 
 
@@ -192,6 +195,7 @@ meta: 最終堆疊模型（Stacking Meta Model）準確率
 
 ### 預測階段
 - `submission.csv`: 預測結果（包含 id 和 rank 欄位）
+
 
 
 
