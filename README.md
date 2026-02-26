@@ -1,11 +1,21 @@
 # ML Assignment 1: Go Rank Prediction System
 
-This repository contains the implementatioThe goal of this assignment is to implement a Machine Learning model that can predict the playing strength (rank) of a Go player from their game records. The dataset contains Go games annotated with player rank labels. Your task is to build a model that uses extracted features from the games to accurately estimate the player’s rank.
+This repository contains the implementation for Assignment 1 of the Machine Learning (CSIE5043) course, Fall 2025, at National Taiwan University. 
+The goal of this assignment is to implement a Machine Learning model that can predict the playing strength (rank) of a Go player from their game records. The dataset contains Go games annotated with player rank labels. Your task is to build a model that uses extracted features from the games to accurately estimate the player’s rank.
 
 
 
 # Kaggle 
 https://www.kaggle.com/competitions/machine-learning-class-fall-2025-assignment-1-q-5/overview
+
+
+# Dataset Description
+
+train_set - the training set The training set consists of nine files, each corresponding to one rank (1D–9D). For example: log_9D_policy_train.txt contains data from 9-dan players, log_8D_policy_train.txt from 8-dan, and so on. Each file records all moves from many games of that rank. Each move includes multiple types of features (policy values, rank model outputs, strength score, lead information).
+
+test_set - the test set The test set has the same format, but samples are aggregated from different game sets than the training data. Test samples are grouped several games per sample. This ensures that models cannot rely on memorization and must generalize to unseen data.
+
+sample_submission.csv - a sample submission file in the correct format
 
 
 
@@ -182,6 +192,7 @@ meta: 最終堆疊模型（Stacking Meta Model）準確率
 
 ### 預測階段
 - `submission.csv`: 預測結果（包含 id 和 rank 欄位）
+
 
 
 
