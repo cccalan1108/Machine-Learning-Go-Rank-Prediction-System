@@ -11,10 +11,10 @@ https://www.kaggle.com/competitions/machine-learning-class-fall-2025-assignment-
 
 # 圍棋模型訓練與預測專案
 
-## 專案概述
+### 專案概述
 本專案實作了一個基於多模態（序列 + 表格特徵）的 Stacking Ensemble Model，整合多種機器學習子模型，進行訓練、驗證與最終預測輸出。
 
-## 專案結構
+### 專案結構
 project/
 │
 ├── trainml1.py            # 主訓練程式 (訓練StackX模型)
@@ -27,7 +27,7 @@ project/
 └── test_set/              # 測試資料夾（相對路徑）
 
 
-## 檔案說明
+### 檔案說明
 
 ### trainml.py - 模型訓練腳本
 訓練主程式位於 trainml1.py。
@@ -182,6 +182,7 @@ meta: 最終堆疊模型（Stacking Meta Model）準確率
 
 ### 預測階段
 - `submission.csv`: 預測結果（包含 id 和 rank 欄位）
+
 
 
 
