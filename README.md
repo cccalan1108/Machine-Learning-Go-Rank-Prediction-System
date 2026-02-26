@@ -11,16 +11,65 @@ https://www.kaggle.com/competitions/machine-learning-class-fall-2025-assignment-
 
 # Dataset Description
 
-## train_set 
+### train_set 
 The training set The training set consists of nine files, each corresponding to one rank (1D–9D). For example: log_9D_policy_train.txt contains data from 9-dan players, log_8D_policy_train.txt from 8-dan, and so on. Each file records all moves from many games of that rank. Each move includes multiple types of features (policy values, rank model outputs, strength score, lead information).
 
-## test_set 
+### test_set 
 The test set The test set has the same format, but samples are aggregated from different game sets than the training data. Test samples are grouped several games per sample. This ensures that models cannot rely on memorization and must generalize to unseen data.
 
-## sample_submission.csv 
+### sample_submission.csv 
 Asample submission file in the correct format
 
 
+
+
+
+# Project Structure
+
+project/
+│
+├── trainml1.py          # Main training script (trains the StackX model)
+├── Q5.py                # Testing and prediction script (generates submission.csv)
+├── train_summary.json   # Training summary (cross‑validation results of each module)
+├── model_stackx.pkl     # Trained final StackX model (pickle format)
+├── submission.csv       # Final prediction output file
+│
+├── train_set/           # Training data folder (relative path)
+└── test_set/            # Test data folder (relative path)
+
+
+
+# File Descriptions
+
+
+trainml.py – Model Training Script
+The main training script is trainml1.py.
+You can run it directly; the program will automatically load data folders via relative paths.
+Usage:
+
+```bash
+python trainml.py --train_dir train_set --out_dir . --gpu --seq_len 120 --epochs 10
+```
+
+```bash
+python trainml1.py \
+  --train_dir ./train_set \
+  --out_dir ./out_dir \
+  --seq_len 120 \
+  --epochs 10 \
+  --batch_size 128 \
+  --lr 0.007 \
+  --seed 42 \
+  --gpu
+```
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------
 
 # 圍棋模型訓練與預測專案
 
@@ -195,6 +244,7 @@ meta: 最終堆疊模型（Stacking Meta Model）準確率
 
 ### 預測階段
 - `submission.csv`: 預測結果（包含 id 和 rank 欄位）
+
 
 
 
