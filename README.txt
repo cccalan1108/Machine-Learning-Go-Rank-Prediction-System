@@ -1,4 +1,4 @@
-# ML Assignment 1: Go Rank Prediction System
+#ML Assignment 1: Go Rank Prediction System
 
 This repository contains the implementatioThe goal of this assignment is to implement a Machine Learning model that can predict the playing strength (rank) of a Go player from their game records. The dataset contains Go games annotated with player rank labels. Your task is to build a model that uses extracted features from the games to accurately estimate the player’s rank.
 
@@ -182,6 +182,7 @@ meta: 最終堆疊模型（Stacking Meta Model）準確率
 
 ### 預測階段
 - `submission.csv`: 預測結果（包含 id 和 rank 欄位）
+
 
 
 
