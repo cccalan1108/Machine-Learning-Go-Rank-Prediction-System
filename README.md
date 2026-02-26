@@ -159,9 +159,11 @@ Each line records a move and its corresponding feature information, including:
 - TinyTransformer: Transformer‑based sequence model capturing long‑term game dependencies.
 - BiLSTM: Bidirectional LSTM model for time‑series information.
 - Config: Total feature dimension is 79, with sequence length set to 120 moves.
+  
 2. Tabular Models
 - Models: CatBoost or HistGradientBoostingClassifier (HGBT).
 - Design: Extracts statistical information and game‑state dynamics from the entire game, and partitions features into opening, midgame, and endgame segments.
+
 3. Fusion via Meta‑learning
 - Meta‑learner: Logistic Regression.
 - Fusion: Combines outputs from the sequence models and tabular models, along with additional side features, to form the final prediction.
@@ -195,11 +197,15 @@ Each line records a move and its corresponding feature information, including:
 
 # Training Pipeline
 1.Data Parsing: Read game logs and convert them into model‑ready formats.
+
 2.Feature Processing: Extract and integrate sequence and tabular features.
+
 3.Model Training:
   - Train the Transformer and BiLSTM sequence models.
   - Train tabular models (CatBoost or HGBT).
+
 4.Model Ensembling: Use Logistic Regression to combine outputs of multiple models into the final prediction.
+
 5.Model Saving: Store the complete stacked model as model_stackx.pkl
 
 
@@ -207,12 +213,16 @@ Each line records a move and its corresponding feature information, including:
 
 # Prediction Pipeline
 1.Model Loading: Load the trained model_stackx.pkl.
+
 2.Data Processing: Parse test data and generate features consistent with the training phase.
+
 3.Multi‑model Prediction:
   - Use Transformer and BiLSTM for sequence predictions.
   - Tabular models predict global features.
   - Incorporate side features for additional signals.
+
 4.Model Ensembling: The meta‑learner aggregates predictions from all models.
+
 5.Output Results: Generate the final submission file submission.csv (containing id and rank columns).
 
 
@@ -222,6 +232,7 @@ Each line records a move and its corresponding feature information, including:
 1.Training Phase
   - model_stackx.pkl: Complete stacked model
   - train_summary.json: Training summary information
+
 2.Prediction Phase
   - submission.csv: Prediction results (with id and rank columns)
 
@@ -404,6 +415,7 @@ meta: 最終堆疊模型（Stacking Meta Model）準確率
 
 ### 預測階段
 - `submission.csv`: 預測結果（包含 id 和 rank 欄位）
+
 
 
 
